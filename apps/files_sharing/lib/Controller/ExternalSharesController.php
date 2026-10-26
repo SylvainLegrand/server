@@ -50,6 +50,7 @@ class ExternalSharesController extends Controller {
 	 * @NoOutgoingFederatedSharingRequired
 	 */
 	#[NoAdminRequired]
+	#[TokenScope(scope: TokenScopes::FILES_READ)]
 	public function index(): JSONResponse {
 		return new JSONResponse($this->externalManager->getOpenShares($this->getUser()));
 	}
