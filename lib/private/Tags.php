@@ -210,6 +210,7 @@ class Tags implements ITags {
 			}
 			$tagId = $this->getTagId($tag);
 		}
+		$tagId = $this->getTagIdByIdOrName($tag);
 
 		if ($tagId === false) {
 			$l10n = \OCP\Util::getL10N('core');
@@ -509,8 +510,6 @@ class Tags implements ITags {
 				$this->add($tag);
 			}
 			$tagId = $this->getTagId($tag);
-		} else {
-			$tagId = $tag;
 		}
 		$qb = $this->db->getQueryBuilder();
 		$qb->insert(self::RELATION_TABLE)
@@ -557,6 +556,7 @@ class Tags implements ITags {
 		} else {
 			$tagId = $tag;
 		}
+		$tagId = $this->getTagIdByIdOrName($tag);
 
 		try {
 			$qb = $this->db->getQueryBuilder();
@@ -662,6 +662,24 @@ class Tags implements ITags {
 			return $this->tags[$key]->getId();
 		}
 		return false;
+	}
+
+	/**
+	 * Get a tag's ID from either its ID or its name.
+	 *
+	 * A numeric value is only accepted as ID if it is the ID of one of the loaded tags.
+	 *
+	 * @param string $tag The tag ID or name to look for.
+	 * @return int|false The tag's id or false if no matching tag is found.
+	 */
+	private function getTagIdByIdOrName(string $tag): int|false {
+		if (is_numeric($tag)) {
+			$key = $this->getTagById($tag);
+			if ($key !== false) {
+				return $this->tags[$key]->id ?? -1;
+			}
+		}
+		return $this->getTagId($tag);
 	}
 
 	/**
