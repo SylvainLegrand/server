@@ -57,7 +57,7 @@ export default defineConfig({
 		},
 		coverage: {
 			include: ['./apps/*/src/**'],
-			exclude: ['**.spec.*', '**.test.*', '**.cy.*', './apps/settings/src/authtokens/**'],
+			exclude: ['**.spec.*', '**.test.*', '**.cy.*', './apps/settings/src/authtokens/**', './apps/settings/src/password/**', './apps/settings/src/webauthn/**', './apps/settings/src/language-locale/**'],
 			reporter: ['lcov', 'text'],
 			reportsDirectory: resolve(import.meta.dirname, '../../coverage/legacy'),
 		},
@@ -68,8 +68,11 @@ export default defineConfig({
 		exclude: [
 			...defaultExclude,
 			...gitIgnore,
-			// the app password section is Vue 3, it is tested by the Vue 3 frontend
+			// these sections are Vue 3, they are tested by the Vue 3 frontend
 			'**/apps/settings/src/authtokens/**',
+			'**/apps/settings/src/password/**',
+			'**/apps/settings/src/webauthn/**',
+			'**/apps/settings/src/language-locale/**',
 		],
 		globalSetup: './__tests__/setup-global.js',
 		server: {
